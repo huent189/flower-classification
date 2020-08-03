@@ -20,7 +20,7 @@ class VGG(nn.Module):
         out = self.layer3(out)
         out = self.layer4(out)
         out = torch.flatten(out,start_dim=1)
-        print(out.shape)
+        # print(out.shape)
         return self.clasifier(out)
 
 if __name__ == "__main__":
