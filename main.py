@@ -20,9 +20,9 @@ parser.add_argument('--restore_file', default=None,
                     training")
 parser.add_argument('--mode', default='train', help="specific run train or evaluate")
 def accuracy(outputs, targets):
-    outputs = torch.argmax(outputs, dim = 1).numpy()
+    outputs = torch.argmax(outputs, dim = 1).cpu().numpy()
     # print(outputs)
-    targets = targets.numpy()
+    targets = targets.cpu().numpy()
     return len (outputs[outputs == targets]) / len(targets)
 
 if __name__ == "__main__":
