@@ -3,7 +3,6 @@ from torch.utils.data import Dataset
 from torchvision.datasets import ImageFolder
 import torch
 import os
-transform = transforms.Compose([transforms.Resize((128, 128)), transforms.ToTensor()])
 
 def fetch_dataloader(data_dir, split_ratito, params):
     """
@@ -15,7 +14,8 @@ def fetch_dataloader(data_dir, split_ratito, params):
     Returns:
         data: (dict) contains the DataLoader object for each type in types
     """
-    datasets = ImageFolder(root = data_dir, transform=transform)
+    transform_list = [transforms.Resize((128, 128)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+    datasets = ImageFolder(root = data_dir, transform=transforms.Compose(transform_list))
     dataloaders = {}
     split_len = [int(ratito * len(datasets)) for ratito in split_ratito]
     split_len[-1] = len(datasets) - split_len[0] - split_len[1]
@@ -24,3 +24,11 @@ def fetch_dataloader(data_dir, split_ratito, params):
     dataloaders['val'] = torch.utils.data.DataLoader(val, shuffle=True, batch_size=params.batch_size, num_workers=params.num_workers, pin_memory=params.cuda)
     dataloaders['test'] = torch.utils.data.DataLoader(test, shuffle=True, batch_size=params.batch_size, num_workers=params.num_workers, pin_memory=params.cuda)
     return dataloaders
+def compute_batch_norm(transform_list, dl):
+    nb_sample = len(dl)
+    mean = 0
+    std = 0
+    for X, y in dl:
+        mean += X.mean(dim=[0,2,3])
+        std += X.std(dim=[0,2,3])
+    return mean / nb_sample, std / nb_sample

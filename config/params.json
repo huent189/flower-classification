@@ -1,6 +1,7 @@
 {
-    "epoch" : 10,
-    "batch_size" : 128,
+    "epoch" : 20,
+    "batch_size" : 64,
     "seed" : 230,
+    "lr" : 1e-4,
     "num_workers" : 2
 }

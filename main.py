@@ -41,8 +41,9 @@ if __name__ == "__main__":
 
     model = VGG((128, 128), 5)
     loss_fn = torch.nn.CrossEntropyLoss()
-    optimizer = Adam(model.parameters())
-    dataloaders = fetch_dataloader(args.data_dir, [0.6, 0.2, 0.2], params)
+    optimizer = Adam(model.parameters(), lr=params.lr)
+    dataloaders = fetch_dataloader(args.data_dir, [0.8, 0.1, 0.1], params)
+    print(len(dataloaders['train']), len(dataloaders['val']), len(dataloaders['val']))
     if(args.restore_file):
         model.load_state_dict(torch.load(args.restore_file))
     if(torch.cuda.is_available()):

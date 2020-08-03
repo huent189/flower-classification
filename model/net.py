@@ -12,7 +12,14 @@ class VGG(nn.Module):
         self.layer3 = nn.Sequential(nn.Conv2d(128, 256, (3,3), 1, 1), nn.Conv2d(256, 256, (3,3), 1, 1), nn.Conv2d(256, 256, (3,3), 1, 1), nn.MaxPool2d((2,2),2), nn.ReLU())
         self.layer4 = nn.Sequential(nn.Conv2d(256, 512, (3,3), 1, 1), nn.Conv2d(512, 512, (3,3), 1, 1), nn.Conv2d(512, 512, (3,3), 1, 1), nn.MaxPool2d((2,2),2), nn.ReLU())
         hid_dim = int(input_dim[0]* input_dim[1] / 16 / 16 * 512)
-        self.clasifier = nn.Sequential(nn.Linear(hid_dim, 512), nn.ReLU(), nn.Linear(512, 512), nn.ReLU(), nn.Linear(512, output_dim))
+        self.clasifier = nn.Sequential(
+                        nn.Dropout(),
+                        nn.Linear(hid_dim, 512), 
+                        nn.ReLU(), 
+                        nn.Dropout(),
+                        nn.Linear(512, 512), 
+                        nn.ReLU(), 
+                        nn.Linear(512, output_dim))
     
     def forward(self, x):
         out = self.layer1(x)
@@ -26,5 +33,5 @@ class VGG(nn.Module):
 if __name__ == "__main__":
     model = VGG((128, 128), 6)
     out_test = model(torch.rand((10, 3,128,128)))
-    print(out_test)
-    print(out_test.shape)
+    print(model)
+    # print(out_test.shape)

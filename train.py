@@ -17,8 +17,8 @@ def train(model, optimizer, loss_fcn, data):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-    logging.info("Train: Time: {}".format(time.time() - t0))
-    logging.info("Loss: {:.2f}".format(loss))
+    logging.info("Train\tTime: {:.2f}| Loss: {:.2f}:".format(time.time() - t0, loss))
+    # logging.info("Loss: {:.2f}".format(loss))
     return loss
 
 def evaluate(model, loss_fcn, data, accumulated_metric):
@@ -33,8 +33,7 @@ def evaluate(model, loss_fcn, data, accumulated_metric):
         loss = loss_fcn(y_hat, y)
         acc += accumulated_metric(y_hat, y)
     acc = acc / len(data)
-    logging.info("Train: Time: {}".format(time.time() - t0))
-    logging.info("Loss: {:.2f}. Accuracy: {:.2f}".format(loss, acc))
+    logging.info("Eval\t\t\t\t\tTime: {:.2f}| Loss: {:.2f}| Accuracy: {:.2f}".format(time.time() - t0, loss, acc))
     return loss, acc
 
 def train_and_eval(model, loss_fn, train_dataloader, val_dataloader, optimizer, total_epoch, accumulated_metric, save_path):
@@ -47,4 +46,5 @@ def train_and_eval(model, loss_fn, train_dataloader, val_dataloader, optimizer, 
         if val_loss < best_loss:
             best_idx = i
             torch.save(model.state_dict(), save_path + "train.{}th.pth".format(i))
+            best_loss = val_loss
     return best_idx
