@@ -1,8 +1,11 @@
+import json
 import logging
 import os
+import random
 import shutil
-import json
+import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 class Params():
     """Class that loads hyperparameters from a json file.
@@ -17,16 +20,16 @@ class Params():
         with open(json_path) as f:
             params = json.load(f)
             self.__dict__.update(params)
-    
+
     def save(self, json_path):
         with open(json_path) as f:
             json.dump(self.__dict__, f, indent=4)
-    
+
     def update(self, json_path):
         with open(json_path) as f:
             params = json.load(f)
             self.__dict__.update(params)
-    
+
     @property
     def dict(self):
         """Gives dict-like access to Params instance by `params.dict['learning_rate']"""
@@ -55,3 +58,20 @@ def set_logger(log_path):
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(logging.Formatter('%(message)s'))
         logger.addHandler(stream_handler)
+
+def seed_everything(seed):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = True
+    torch.backends.cudnn.enable = True
+
+def plot_result(train_result, val_result, title, save_path):
+    plt.plot(range(len(train_result)), train_result, label="train")
+    plt.plot(range(len(val_result)), val_result, label="validation")
+    plt.legend()
+    plt.title(title)
+    plt.savefig(save_path)
