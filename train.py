@@ -39,7 +39,7 @@ def evaluate(model, loss_fcn, data, accumulated_metric):
     return loss.item(), metric
 
 def train_and_eval(model, loss_fn, train_dataloader, val_dataloader, optimizer, total_epoch, accumulated_metric, save_path):
-    best_acc = 9999
+    best_acc = 0
     train_losses = []
     train_accs = []
     val_losses = []
@@ -52,7 +52,7 @@ def train_and_eval(model, loss_fn, train_dataloader, val_dataloader, optimizer, 
         train_accs.append(train_acc)
         val_losses.append(val_loss)
         val_accs.append(val_acc)
-        if val_acc < best_acc:
+        if val_acc > best_acc:
             torch.save(model.state_dict(), save_path + "best.pth")
             best_acc = val_acc
     return train_losses, train_accs, val_losses, val_accs
