@@ -35,7 +35,7 @@ def evaluate(model, loss_fcn, data, accumulated_metric):
         loss = loss_fcn(y_hat, y)
         metric += accumulated_metric(y_hat, y, 5)
     metric = metric / len(data) * 100
-    print("Eval\t\t\t\t\tTime: {:.2f}| Loss: {:.2f}|Accuracy: {:.2f}".format(time.time() - t0, loss, metric))
+    logging.info("Eval\t\t\t\t\tTime: {:.2f}| Loss: {:.2f}|Accuracy: {:.2f}".format(time.time() - t0, loss, metric))
     return loss.item(), metric
 
 def train_and_eval(model, loss_fn, train_dataloader, val_dataloader, optimizer, total_epoch, accumulated_metric, save_path):
@@ -45,7 +45,7 @@ def train_and_eval(model, loss_fn, train_dataloader, val_dataloader, optimizer, 
     val_losses = []
     val_accs = []
     for i in range(total_epoch):
-        print("Epoch {}:".format(i))
+        logging.info("Epoch {}:".format(i))
         train_loss, train_acc = train(model, optimizer, loss_fn, train_dataloader, accumulated_metric)
         val_loss, val_acc = evaluate(model, loss_fn, val_dataloader, accumulated_metric)
         train_losses.append(train_loss)

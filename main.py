@@ -10,7 +10,7 @@ from dataset.data_loader import fetch_dataloader
 from model.metric import accuracy
 from model.net import VGG
 from train import evaluate, train_and_eval
-from utils import plot_result
+from utils import plot_result, seed_everything
 
 VERSION = "_v2.3.1"
 parser = argparse.ArgumentParser()
@@ -32,16 +32,14 @@ if __name__ == "__main__":
     params = utils.Params(json_path)
 
     params.cuda = torch.cuda.is_available()
-    torch.manual_seed(params.seed)
-    if params.cuda:
-        torch.cuda.manual_seed(params.seed)
+    seed_everything(params.seed)
     utils.set_logger(os.path.join(args.model_dir, "log/" + args.mode + VERSION + ".log"))
 
     model = VGG((224, 224), 5)
     loss_fn = torch.nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr=params.lr, eps=1e-4, amsgrad=True)
     dataloaders = fetch_dataloader(args.data_dir, [0.8, 0.1, 0.1], params)
-    print(len(dataloaders['train']), len(dataloaders['val']), len(dataloaders['val']))
+
     if(args.restore_file):
         model.load_state_dict(torch.load(args.restore_file))
     if(torch.cuda.is_available()):
