@@ -138,3 +138,14 @@ class ResNet50(nn.Module):
         out = torch.mean(out, [2, 3])
         # print(out.shape)
         return self.clasifier(out)
+
+if __name__ == "__main__":
+    model = ResNet18((128, 128), 6)
+    out_test = model(torch.rand((10, 3, 128, 128)))
+    print("Resnet18\n", model)
+    print(out_test.shape)
+
+    model = ResNet50((128, 128), 6)
+    out_test = model(torch.rand((10, 3, 128, 128)))
+    print("Resnet50\n", model)
+    print(out_test.shape)
