@@ -8,11 +8,11 @@ from torch.optim.adam import Adam
 import utils
 from dataset.data_loader import fetch_dataloader
 from model.metric import accuracy
-from model.net import VGG
+from model import VGG16
 from train import evaluate, train_and_eval
 from utils import plot_result, seed_everything
 
-VERSION = "_v2.3.1"
+VERSION = "_v2.3.2"
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/flowers',
                     help="Directory containing the dataset")
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     seed_everything(params.seed)
     utils.set_logger(os.path.join(args.model_dir, "log/" + args.mode + VERSION + ".log"))
 
-    model = VGG((224, 224), 5)
+    model = VGG16((224, 224), 5, True)
     loss_fn = torch.nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr=params.lr, eps=1e-4, amsgrad=True)
     dataloaders = fetch_dataloader(args.data_dir, [0.8, 0.1, 0.1], params)
