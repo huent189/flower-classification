@@ -2,7 +2,7 @@ import numpy
 import torch
 import torch.nn as nn
 
-class VGG(nn.Module):
+class VGG16(nn.Module):
     def __init__(self, input_dim, output_dim, use_GAP=False):
         super().__init__()
         self.input_dim = input_dim
