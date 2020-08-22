@@ -4,11 +4,14 @@ import time
 
 import torch
 from torch.optim.adam import Adam
+from torchvision.models.resnet import ResNet
 
 import utils
 from dataset.data_loader import fetch_dataloader
+from model.VGG import VGG16
 from model.metric import accuracy
-from model import VGG16
+from model.ResNet import ResNet18
+from model.ResNet import ResNet50
 from train import evaluate, train_and_eval
 from utils import plot_result, seed_everything
 
@@ -35,7 +38,7 @@ if __name__ == "__main__":
     seed_everything(params.seed)
     utils.set_logger(os.path.join(args.model_dir, "log/" + args.mode + VERSION + ".log"))
 
-    model = VGG16((224, 224), 5, True)
+    model = ResNet50((224, 224), 5)
     loss_fn = torch.nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr=params.lr, eps=1e-4, amsgrad=True)
     dataloaders = fetch_dataloader(args.data_dir, [0.8, 0.1, 0.1], params)

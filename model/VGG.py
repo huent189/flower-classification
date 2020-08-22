@@ -68,7 +68,7 @@ class VGG16(nn.Module):
 
 
 if __name__ == "__main__":
-    model = VGG((128, 128), 6, True)
+    model = VGG16((128, 128), 6, True)
     out_test = model(torch.rand((10, 3, 128, 128)))
     print(model)
     print(out_test.shape)
